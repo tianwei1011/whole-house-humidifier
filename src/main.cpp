@@ -21,7 +21,7 @@
 #define PWM_FREQ 1000      // 1 kHz (suitable for motor control)
 #define PWM_CHANNEL 0
 #define PWM_RESOLUTION 8   // 8-bit resolution (0-255)
-#define PWM_DUTY_100 255   // 100% of 255
+#define PWM_DUTY_85 217    // 85% of 255
 
 // Water level detection
 #define DEBOUNCE_COUNT 10  // Number of consecutive reads needed to change state// Add calibration offsets at the top of your file
@@ -178,11 +178,11 @@ void control_task(void *pvParameters) {
       switch (pumpState) {
         case PUMP_IDLE:
           // Start pump cycle
-          ledcWrite(PWM_CHANNEL, PWM_DUTY_100);
+          ledcWrite(PWM_CHANNEL, PWM_DUTY_85);
           pumpActive = true;
-          countdown = 30;
+          countdown = 60;
           pumpState = PUMP_RUNNING;
-          Serial.println("Pump started for 30s at 100%");
+          Serial.println("Pump started for 60s at 85%");
           break;
           
         case PUMP_RUNNING:
@@ -192,9 +192,9 @@ void control_task(void *pvParameters) {
             // Pump cycle complete, stop pump
             ledcWrite(PWM_CHANNEL, 0);
             pumpActive = false;
-            countdown = 120;
+            countdown = 60;
             pumpState = PUMP_WAITING;
-            Serial.println("Pump stopped, waiting 120s");
+            Serial.println("Pump stopped, waiting 60s");
           }
           break;
           
